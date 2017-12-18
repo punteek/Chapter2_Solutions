@@ -4,6 +4,13 @@
 // Linked List Implementation
 
 #include <iostream>
+#include <unordered_set>
+
+struct Node
+{
+	int data;
+	Node* next;
+};
 
 class LinkedList
 {
@@ -47,6 +54,25 @@ class LinkedList
 			return;
 		}
 
+		Node* getStart()
+		{
+			return m_head;
+		}
+		
+		// only use this if you know you are deleting at a valid index in the list
+		void deleteAt(int index)
+		{
+			Node* iter = m_head;
+			for (int i = 0; i < index - 1; i++)
+			{
+				iter = iter->next;
+			}
+
+			Node* toDelete = iter->next;
+			iter->next = iter->next->next;
+			delete toDelete;
+		}
+		
 		void print()
 		{
 			Node* iter = m_head;
@@ -56,13 +82,8 @@ class LinkedList
 				iter = iter->next;
 			}
 		}
-
+	
 	private:
-		struct Node
-		{
-			int data;
-			Node* next;
-		};
 		Node* m_head;
 };
 
@@ -70,9 +91,30 @@ class LinkedList
 	2.1 Remove Dups: Write code to remove duplicates from an unsorted linked list.
 */
 
-void removeDups()
+void removeDups(LinkedList* someList)
 {
+	// put all numbers into unordered_set as we go, if it already exists, then remove it from the list
+
+	Node* head = someList->getStart();
 	
+	std::unordered_set<int> repeats;
+	std::unordered_set<int>::iterator iter;
+
+	while (head->next != nullptr)
+	{
+		iter = repeats.find(head->next->data);
+		if (iter == repeats.end())
+		{
+			repeats.insert(head->data);
+		}
+		else
+		{
+			// delete the node
+
+
+		}
+	}
+
 }
 
 
@@ -83,6 +125,12 @@ int main()
 	LinkedList* myList = new LinkedList();
 	myList->insert(5);
 	myList->insert(7);
+	myList->insert(3);
+	myList->insert(4);
+	myList->insert(7);
+
+	myList->deleteAt(2);
+
 	myList->print();
 
 	return 0;
